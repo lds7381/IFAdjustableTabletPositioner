@@ -3,7 +3,7 @@ Innovation Fellows Adjustable Tablet Positioner Team ------
 
 Team Members:
 -Liam Sullivan
--Garrett DeLang
+-Garrett DeLang :)
 -Haley Czerwinski
 -AnAn Yu
 -Hashir Awan
