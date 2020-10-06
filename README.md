@@ -5,6 +5,6 @@ Team Members:
 -Liam Sullivan
 -Garrett DeLang :)
 -Haley Czerwinski
--AnAn Yu
+-AnAn Yu-
 -Hashir Awan
 -Athaxes Alexandre
