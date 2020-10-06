@@ -1,5 +1,5 @@
 # IFAdjustableTabletPositioner
-Innovation Fellows Adjustable Tablet Positioner Team Repository
+Innovation Fellows Adjustable Tablet Positioner Team ------
 
 Team Members:
 -Liam Sullivan
