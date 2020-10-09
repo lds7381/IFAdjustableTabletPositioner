@@ -4,17 +4,17 @@ Innovation Fellows Adjustable Tablet Positioner Team
 
 Team Members:
 
--Liam Sullivan
+	-Liam Sullivan
 
--Garrett DeLang 
+	-Garrett DeLang 
 
--Haley Czerwinski
+	-Haley Czerwinski
 
--AnAn Yu
+	-AnAn Yu
 
--Hashir Awan
+	-Hashir Awan
 
--Athaxes Alexandre 
+	-Athaxes Alexandre 
 
 
 This project uses a EK-TM4C123GXL ARM® Cortex®-M4F microcontroller and Uses Keil uVision 5. 
