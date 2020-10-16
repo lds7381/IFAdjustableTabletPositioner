@@ -1,3 +1,15 @@
 .\ajustabletabletpositionermain.o: AjustableTabletPositionerMain.c
 .\ajustabletabletpositionermain.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\ajustabletabletpositionermain.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\inc/tm4c123gh6pm.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\inc/hw_memmap.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\inc/hw_types.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/sysctl.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/interrupt.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/gpio.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/timer.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/debug.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/pwm.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/pin_map.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\inc/hw_gpio.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/rom.h

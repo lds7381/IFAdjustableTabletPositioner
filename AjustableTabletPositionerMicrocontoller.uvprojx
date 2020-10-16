@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>${PROJECT_ROOT}/../../../</IncludePath>
+              <IncludePath>C:\ti\TivaWare_C_Series-2.2.0.295</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
