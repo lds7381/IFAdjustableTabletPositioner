@@ -6,6 +6,18 @@ Section Cross References
 
     ajustabletabletpositionermain.o(i.main) refers to ajustabletabletpositionermain.o(i.MCInit) for MCInit
     ajustabletabletpositionermain.o(i.main) refers to ajustabletabletpositionermain.o(i.InitPWMforServo) for InitPWMforServo
+    startup_tm4c123.o(STACK) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_tm4c123.o(HEAP) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_tm4c123.o(RESET) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_tm4c123.o(RESET) refers to startup_tm4c123.o(STACK) for __initial_sp
+    startup_tm4c123.o(RESET) refers to startup_tm4c123.o(.text) for Reset_Handler
+    startup_tm4c123.o(.text) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_tm4c123.o(.text) refers to system_tm4c123.o(i.SystemInit) for SystemInit
+    startup_tm4c123.o(.text) refers to __main.o(!!!main) for __main
+    startup_tm4c123.o(.text) refers to startup_tm4c123.o(HEAP) for Heap_Mem
+    startup_tm4c123.o(.text) refers to startup_tm4c123.o(STACK) for Stack_Mem
+    system_tm4c123.o(i.SystemCoreClockUpdate) refers to system_tm4c123.o(i.getOscClk) for getOscClk
+    system_tm4c123.o(i.SystemCoreClockUpdate) refers to system_tm4c123.o(.data) for SystemCoreClock
     __main.o(!!!main) refers to __rtentry.o(.ARM.Collect$$rtentry$$00000000) for __rt_entry
     __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry2.o(.ARM.Collect$$rtentry$$0000000A) for __rt_entry_li
     __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry2.o(.ARM.Collect$$rtentry$$0000000D) for __rt_entry_main
@@ -26,7 +38,7 @@ Section Cross References
     __rtentry4.o(.ARM.Collect$$rtentry$$00000004) refers to sys_stackheap_outer.o(.text) for __user_setup_stackheap
     __rtentry4.o(.ARM.exidx) refers to __rtentry4.o(.ARM.Collect$$rtentry$$00000004) for .ARM.Collect$$rtentry$$00000004
     sys_stackheap_outer.o(.text) refers to libspace.o(.text) for __user_perproc_libspace
-    sys_stackheap_outer.o(.text) refers to sys_stackheap.o(.text) for __user_initial_stackheap
+    sys_stackheap_outer.o(.text) refers to startup_tm4c123.o(.text) for __user_initial_stackheap
     exit.o(.text) refers to rtexit.o(.ARM.Collect$$rtexit$$00000000) for __rt_exit
     libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000002E) for __rt_lib_init_alloca_1
     libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000002C) for __rt_lib_init_argv_1
@@ -50,8 +62,6 @@ Section Cross References
     libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000025) for __rt_lib_init_stdio_1
     libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000C) for __rt_lib_init_user_alloc_1
     libspace.o(.text) refers to libspace.o(.bss) for __libspace_start
-    sys_stackheap.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
-    sys_stackheap.o(.text) refers to use_no_semi.o(.text) for __I$use$semihosting
     rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for __rt_exit_exit
     rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for __rt_exit_ls
     rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000002) for __rt_exit_prels_1
@@ -109,3 +119,17 @@ Section Cross References
     defsig_segv_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
     defsig_other.o(.text) refers to defsig_general.o(.text) for __default_signal_display
 
+
+==============================================================================
+
+Removing Unused input sections from the image.
+
+    Removing ajustabletabletpositionermain.o(i.Timer0IntHandler), (40 bytes).
+    Removing system_tm4c123.o(.rev16_text), (4 bytes).
+    Removing system_tm4c123.o(.revsh_text), (4 bytes).
+    Removing system_tm4c123.o(.rrx_text), (6 bytes).
+    Removing system_tm4c123.o(i.SystemCoreClockUpdate), (196 bytes).
+    Removing system_tm4c123.o(i.getOscClk), (244 bytes).
+    Removing system_tm4c123.o(.data), (4 bytes).
+
+7 unused section(s) (total 498 bytes) removed from the image.
