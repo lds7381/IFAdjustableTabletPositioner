@@ -17,7 +17,6 @@
 // Constants
 #define PWM_FREQ 55
 
-extern void GPIOPinConfigure(uint32_t ui32PinConfig);
 //-----------------------------------------------------------------------------------------------------------------------------
 // Methods
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -84,6 +83,14 @@ void position_servo(uint8_t Degrees, uint32_t Load)
        ui8Adjust = 56.0 + ((float)Degrees * (111.0 - 56.0)) / 180.0; // Calculating the adjust from the degrees given
     }
     PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, ui8Adjust * Load / 1000);
+}
+
+void CreateNewStudent(uint8_t Id){
+		
+}
+
+void get_servo_position(){
+	
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
