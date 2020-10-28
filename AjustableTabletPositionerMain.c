@@ -15,7 +15,7 @@
 #include "driverlib/rom.h"
 
 // Constants
-#define PWM_FREQ 55
+#define PWM_FREQ 50
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Methods
@@ -66,10 +66,6 @@ void InitPWMforServo(uint32_t Load, uint32_t PWMClock, uint8_t Adjust){
 	PWMGenConfigure(PWM1_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN);
 	PWMGenPeriodSet(PWM1_BASE, PWM_GEN_0, Load);
 	
-	//Enables PWM to run
-	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, Adjust * Load / 1000); // sets the pulse with using the adjust and load, 
-	PWMOutputState(PWM1_BASE, PWM_OUT_0_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
-	PWMGenEnable(PWM1_BASE, PWM_GEN_0);
 }
 
 // Creates a pulse width from degrees that will be sent to the servo motor (0 to 180 degrees)
@@ -120,6 +116,10 @@ int main(void){
 	
 	MCInit(); // Initialize the board
 	InitPWMforServo(ui32Load, ui32PWMClock, ui8Adjust);
+	position_servo(30, ui32Load);
+	//Enables PWM to run
+	PWMOutputState(PWM1_BASE, PWM_OUT_0_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
+	PWMGenEnable(PWM1_BASE, PWM_GEN_0);
 	
 	//Main Code
 	while (1){
