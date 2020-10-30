@@ -13,3 +13,5 @@
 .\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/pin_map.h
 .\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\inc/hw_gpio.h
 .\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/rom.h
+.\ajustabletabletpositionermain.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/uart.h

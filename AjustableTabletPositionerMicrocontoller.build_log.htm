@@ -17,7 +17,7 @@ Library Manager: ArmAr.exe V5.06 update 7 (build 960)
 Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
 CPU DLL:         SARMCM3.DLL V5.32.0.0
 Dialog DLL:      DCM.DLL V1.17.3.0
-Target DLL:      UL2CM3.DLL V1.163.9.0
+Target DLL:      lmidk-agdi.dll V???
 Dialog DLL:      TCM.DLL V1.46.0.0
  
 <h2>Project:</h2>
@@ -27,13 +27,10 @@ Project File Date:  10/28/2020
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
-assembling startup_TM4C123.s...
-compiling ProfileLinkedList.c...
-compiling system_TM4C123.c...
 compiling AjustableTabletPositionerMain.c...
-AjustableTabletPositionerMain.c(49): warning:  #550-D: parameter "Adjust"  was set but never used
+AjustableTabletPositionerMain.c(58): warning:  #550-D: parameter "Adjust"  was set but never used
   void InitPWMforServo(uint32_t Load, uint32_t PWMClock, uint8_t Adjust){
-AjustableTabletPositionerMain.c(115): warning:  #177-D: variable "ui8Degrees"  was declared but never referenced
+AjustableTabletPositionerMain.c(137): warning:  #177-D: variable "ui8Degrees"  was declared but never referenced
   	uint8_t ui8Degrees;
 AjustableTabletPositionerMain.c: 2 warnings, 0 errors
 linking...
@@ -67,7 +64,7 @@ Package Vendor: Keil
       Include file:  Device\Include\TM4C123\TM4C123.h
       Source file:   Device\Source\ARM\startup_TM4C123.s
       Source file:   Device\Source\system_TM4C123.c
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

@@ -13,6 +13,8 @@
 #include "driverlib/pin_map.h"
 #include "inc/hw_gpio.h"
 #include "driverlib/rom.h"
+#include <stdio.h>
+#include "driverlib/uart.h"
 
 // Constants
 #define PWM_FREQ 50
@@ -44,6 +46,13 @@ void MCInit(void){
 	IntEnable(INT_TIMER0A); // Enable interrupt vector INT_TIMER0A
 	TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT); 
 	IntMasterEnable();
+	
+	//UART Enable
+	//UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
+	//IntEnable(INT_UART0); //enable the UART interrupt 
+	//UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT); //only enable RX and TX interrupts
+	//UARTEnable(UART0_BASE);
+	
 }
 
 void InitPWMforServo(uint32_t Load, uint32_t PWMClock, uint8_t Adjust){
@@ -63,8 +72,8 @@ void InitPWMforServo(uint32_t Load, uint32_t PWMClock, uint8_t Adjust){
 	//Configures module 1 PWM generator 0 as a down-counter and load the count value. 
 	PWMClock = SysCtlClockGet() / 64;
 	Load = (PWMClock / PWM_FREQ) - 1;
-	PWMGenConfigure(PWM1_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN);
-	PWMGenPeriodSet(PWM1_BASE, PWM_GEN_0, Load);
+	PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN);
+	PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, Load);
 	
 }
 
@@ -78,7 +87,8 @@ void position_servo(uint8_t Degrees, uint32_t Load)
     }else{
        ui8Adjust = 56.0 + ((float)Degrees * (111.0 - 56.0)) / 180.0; // Calculating the adjust from the degrees given
     }
-    PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, ui8Adjust * Load / 1000);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, ui8Adjust * Load / 1000);
+		//UARTCharPut(UART0_BASE, 'a');
 }
 
 void CreateNewStudent(uint8_t Id){
@@ -104,6 +114,18 @@ void Timer0IntHandler(void){
 		}
 }
 
+void UART0Handler(void){
+	
+	uint32_t ui32Status;
+	ui32Status = UARTIntStatus(UART0_BASE, true); //get interrupt status
+	UARTIntClear(UART0_BASE, ui32Status); //ckear the asserted interrupts
+	
+	
+	while(UARTCharsAvail(UART0_BASE)){
+		UARTCharPutNonBlocking(UART0_BASE, UARTCharGetNonBlocking(UART0_BASE)); //echo
+	}
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // Main Method
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -114,12 +136,14 @@ int main(void){
 	uint8_t ui8Adjust;
 	uint8_t ui8Degrees;
 	
+	//UARTCharPut(UART0_BASE, 'a');
+	
 	MCInit(); // Initialize the board
 	InitPWMforServo(ui32Load, ui32PWMClock, ui8Adjust);
 	position_servo(30, ui32Load);
 	//Enables PWM to run
-	PWMOutputState(PWM1_BASE, PWM_OUT_0_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
-	PWMGenEnable(PWM1_BASE, PWM_GEN_0);
+	PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
+	PWMGenEnable(PWM0_BASE, PWM_GEN_0);
 	
 	//Main Code
 	while (1){
