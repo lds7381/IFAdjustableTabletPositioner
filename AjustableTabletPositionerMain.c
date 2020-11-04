@@ -55,13 +55,9 @@ void MCInit(void){
 	
 }
 
-void InitPWMforServo(uint32_t Load, uint32_t PWMClock, uint8_t Adjust){
-	// Setting the adjust to '83' will create a 1.5ms pulse width for the pwm
-	Adjust = 83; 
-	// Divides the system clock by 64 to run the clock at 625kHz which is 40Mhz/64.
-	SysCtlPWMClockSet(SYSCTL_PWMDIV_64);
+void InitPWMforServo(){
 	
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);	 //Enables PWM1
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);	 //Enables PWM0
 	//SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD); //Enables port D for GPIO
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE); //Enables port E for GPIO
 	
@@ -69,12 +65,10 @@ void InitPWMforServo(uint32_t Load, uint32_t PWMClock, uint8_t Adjust){
 	GPIOPinTypePWM(GPIO_PORTE_BASE, GPIO_PIN_4);
 	GPIOPinConfigure(GPIO_PCTL_PE4_M0PWM4);
 	
-	//Configures module 1 PWM generator 0 as a down-counter and load the count value. 
-	PWMClock = SysCtlClockGet() / 64;
-	Load = (PWMClock / PWM_FREQ) - 1;
-	PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN);
-	PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, Load);
-	
+	// Divides the system clock by 64 to run the clock at 625kHz which is 40Mhz/64.
+	SysCtlPWMClockSet(SYSCTL_RCC_USEPWMDIV);
+	SysCtlPWMClockSet(SYSCTL_PWMDIV_2);
+
 }
 
 // Creates a pulse width from degrees that will be sent to the servo motor (0 to 180 degrees)
@@ -87,7 +81,7 @@ void position_servo(uint8_t Degrees, uint32_t Load)
     }else{
        ui8Adjust = 56.0 + ((float)Degrees * (111.0 - 56.0)) / 180.0; // Calculating the adjust from the degrees given
     }
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, ui8Adjust * Load / 1000);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, ui8Adjust * Load / 1000);
 		//UARTCharPut(UART0_BASE, 'a');
 }
 
@@ -132,22 +126,25 @@ void UART0Handler(void){
 
 int main(void){
 	volatile uint32_t ui32Load;
-	uint32_t ui32PWMClock;
-	uint8_t ui8Adjust;
+	volatile uint32_t ui32PWMClock;
 	uint8_t ui8Degrees;
 	
 	//UARTCharPut(UART0_BASE, 'a');
-	
 	MCInit(); // Initialize the board
-	InitPWMforServo(ui32Load, ui32PWMClock, ui8Adjust);
-	position_servo(30, ui32Load);
+	InitPWMforServo();
+	//Configures module 1 PWM generator 0 as a down-counter and load the count value. 
+	ui32PWMClock = SysCtlClockGet() / 64;
+	ui32Load = (ui32PWMClock / PWM_FREQ) - 1;
+	PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN);
+	PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, ui32Load);
+	
 	//Enables PWM to run
-	PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
-	PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+	PWMOutputState(PWM0_BASE, PWM_OUT_4_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
+	PWMGenEnable(PWM0_BASE, PWM_GEN_2);
 	
 	//Main Code
 	while (1){
-		
+		position_servo(120, ui32Load);
 	}
 }
 
