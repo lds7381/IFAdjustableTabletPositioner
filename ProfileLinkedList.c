@@ -1,25 +1,44 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
-
+#include "inc/tm4c123gh6pm.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/interrupt.h"
+#include "driverlib/gpio.h"
+#include "driverlib/timer.h"
+#include "driverlib/debug.h"
+#include "driverlib/pwm.h"
+#include "driverlib/pin_map.h"
+#include "inc/hw_gpio.h"
+#include "driverlib/rom.h"
+#include <stdio.h>
+#include "driverlib/uart.h"
+#include "driverlib/flash.h"
 
 struct StudentProfile{
-	int IdNumber;
-	int ElevatorHeight;
-	int Depth;
-	int ArmHeight;
-	int Tablet;
+	uint32_t IdNumber;
+	uint32_t ElevatorHeight;
+	uint32_t Depth;
+	uint32_t ArmHeight;
+	uint32_t Tablet;
 };
 
 struct node {
    struct StudentProfile profile;
-   int key;
+   uint32_t key;
    struct node *next;
 };
 
 struct node *head = NULL;
 struct node *current = NULL;
+
+//write to flash memory
+void writeToFlash(){
+	
+	
+	
+}
 
 //display the list
 void printList() {
@@ -69,7 +88,7 @@ bool isEmpty() {
 }
 
 int length() {
-   int length = 0;
+   uint32_t length = 0;
    struct node *current;
 	
    for(current = head; current != NULL; current = current->next) {

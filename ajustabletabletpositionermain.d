@@ -15,3 +15,4 @@
 .\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/rom.h
 .\ajustabletabletpositionermain.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/uart.h
+.\ajustabletabletpositionermain.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/flash.h

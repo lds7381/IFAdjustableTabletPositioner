@@ -28,12 +28,15 @@ Project File Date:  10/28/2020
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
 compiling AjustableTabletPositionerMain.c...
-AjustableTabletPositionerMain.c(130): warning:  #177-D: variable "ui8Degrees"  was declared but never referenced
+AjustableTabletPositionerMain.c(109): error:  #158: expression must be an lvalue or a function designator
+  		FlashProgram( &idnum[0], &FLASH_BASE_ADDR+offset, 4 );
+AjustableTabletPositionerMain.c(154): warning:  #177-D: variable "ui8Degrees"  was declared but never referenced
   	uint8_t ui8Degrees;
-AjustableTabletPositionerMain.c: 1 warning, 0 errors
-linking...
-Program Size: Code=4992 RO-data=2052 RW-data=0 ZI-data=608  
-".\AjustableTabletPositionerMicrocontoller.axf" - 0 Error(s), 1 Warning(s).
+AjustableTabletPositionerMain.c(24): warning:  #550-D: variable "flashKey_"  was set but never used
+  static uint16_t flashKey_ = 0;
+AjustableTabletPositionerMain.c: 2 warnings, 1 error
+compiling ProfileLinkedList.c...
+".\AjustableTabletPositionerMicrocontoller.axf" - 1 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -62,7 +65,8 @@ Package Vendor: Keil
       Include file:  Device\Include\TM4C123\TM4C123.h
       Source file:   Device\Source\ARM\startup_TM4C123.s
       Source file:   Device\Source\system_TM4C123.c
-Build Time Elapsed:  00:00:01
+Target not created.
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

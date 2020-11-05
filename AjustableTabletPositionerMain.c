@@ -15,9 +15,19 @@
 #include "driverlib/rom.h"
 #include <stdio.h>
 #include "driverlib/uart.h"
+#include "driverlib/flash.h"
 
 // Constants
 #define PWM_FREQ 50
+#define FLASH_BASE_ADDR ((volatile uint32_t*)0x00020000)
+#define PROF_STRUCT_LEN 4
+
+static uint16_t flashKey_ = 0;
+uint32_t idnum[10];
+uint32_t xpos[10];
+uint32_t ypos[10];
+uint32_t zpos[10];
+uint32_t offset = 1;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Methods
@@ -85,9 +95,61 @@ void position_servo(uint8_t Degrees, uint32_t Load)
 		//UARTCharPut(UART0_BASE, 'a');
 }
 
-void CreateNewStudent(uint8_t Id){
+//
+// Enable Flash Memory Writing
+//
+void Flash_Enable(void){
+	
+	if (FLASH_BOOTCFG_R & 0x10) {
+		flashKey_ = 0xA442;
+	}
+	else{
+		flashKey_ = 0x71D5;
+	}
+	
+}
+
+
+//
+// WRITE TO FLASH MEMORY
+//
+int Flash_Write(const void* data, int wordCount){
+	
+	if (flashKey_ == 0){
+		return -1;
+	}
+	
+	for (int i=0; i < wordCount; i++){
+	
+		FLASH_FMD_R = ((volatile uint32_t*)data)[i];
+		FLASH_FMA_R &= 0xFFFC0000;
+		FLASH_FMA_R |= (uint32_t)FLASH_BASE_ADDR + (offset * sizeof(uint32_t));
+		offset++;
+		
+		FLASH_FMC2_R = (flashKey_ << 16) | 0x1;
+		while( FLASH_FMC_R & 0x1) {}
+		}
+	
+	return 0;
 		
 }
+
+//
+// READ FLASH MEMORY
+//
+void Flash_Read(void* data, int wordCount){
+	
+	for (int i = 0; i < wordCount; i++){
+		((uint32_t*)data)[i] = FLASH_BASE_ADDR[i];
+	}
+	
+}
+
+void CreateNewStudentToFlash(){
+	
+	
+}
+
 
 void get_servo_position(){
 	
@@ -124,10 +186,13 @@ void UART0Handler(void){
 // Main Method
 //-----------------------------------------------------------------------------------------------------------------------------
 
+
+
 int main(void){
 	volatile uint32_t ui32Load;
 	volatile uint32_t ui32PWMClock;
 	uint8_t ui8Degrees;
+	
 	
 	//UARTCharPut(UART0_BASE, 'a');
 	MCInit(); // Initialize the board
@@ -142,8 +207,17 @@ int main(void){
 	PWMOutputState(PWM0_BASE, PWM_OUT_4_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
 	PWMGenEnable(PWM0_BASE, PWM_GEN_2);
 	
+	idnum[0] = 1234;
+	xpos[0] = 10;
+	ypos[0] = 15;
+	zpos[0] = 32;
+	CreateNewStudentToFlash();
+	
 	//Main Code
 	while (1){
+		
+		
+		
 		position_servo(120, ui32Load);
 	}
 }
