@@ -1,0 +1,9 @@
+.\servopwm.o: ServoPWM.c
+.\servopwm.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\servopwm.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\servopwm.o: C:\ti\TivaWare_C_Series-2.2.0.295\inc/tm4c123gh6pm.h
+.\servopwm.o: C:\ti\TivaWare_C_Series-2.2.0.295\inc/hw_memmap.h
+.\servopwm.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/pwm.h
+.\servopwm.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/sysctl.h
+.\servopwm.o: C:\ti\TivaWare_C_Series-2.2.0.295\driverlib/gpio.h
+.\servopwm.o: ServoPWM.h

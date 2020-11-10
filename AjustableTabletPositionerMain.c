@@ -16,18 +16,11 @@
 #include <stdio.h>
 #include "driverlib/uart.h"
 #include "driverlib/flash.h"
+#include "ProfileFlash.h"
+#include "ServoPWM.h"
 
 // Constants
-#define PWM_FREQ 50
-#define FLASH_BASE_ADDR ((volatile uint32_t*)0x00020000)
-#define PROF_STRUCT_LEN 4
 
-static uint16_t flashKey_ = 0;
-uint32_t idnum[10];
-uint32_t xpos[10];
-uint32_t ypos[10];
-uint32_t zpos[10];
-uint32_t offset = 1;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Methods
@@ -65,95 +58,13 @@ void MCInit(void){
 	
 }
 
-void InitPWMforServo(){
-	
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);	 //Enables PWM0
-	//SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD); //Enables port D for GPIO
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE); //Enables port E for GPIO
-	
-	// Enabling pin PE4 for PWM output
-	GPIOPinTypePWM(GPIO_PORTE_BASE, GPIO_PIN_4);
-	GPIOPinConfigure(GPIO_PCTL_PE4_M0PWM4);
-	
-	// Divides the system clock by 64 to run the clock at 625kHz which is 40Mhz/64.
-	SysCtlPWMClockSet(SYSCTL_RCC_USEPWMDIV);
-	SysCtlPWMClockSet(SYSCTL_PWMDIV_2);
-
-}
-
-// Creates a pulse width from degrees that will be sent to the servo motor (0 to 180 degrees)
-void position_servo(uint8_t Degrees, uint32_t Load) 
-{
-    uint8_t ui8Adjust;
-
-    if (Degrees > 180){
-       ui8Adjust = 111;
-    }else{
-       ui8Adjust = 56.0 + ((float)Degrees * (111.0 - 56.0)) / 180.0; // Calculating the adjust from the degrees given
-    }
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, ui8Adjust * Load / 1000);
-		//UARTCharPut(UART0_BASE, 'a');
-}
-
-//
-// Enable Flash Memory Writing
-//
-void Flash_Enable(void){
-	
-	if (FLASH_BOOTCFG_R & 0x10) {
-		flashKey_ = 0xA442;
-	}
-	else{
-		flashKey_ = 0x71D5;
-	}
-	
-}
 
 
-//
-// WRITE TO FLASH MEMORY
-//
-int Flash_Write(const void* data, int wordCount){
-	
-	if (flashKey_ == 0){
-		return -1;
-	}
-	
-	for (int i=0; i < wordCount; i++){
-	
-		FLASH_FMD_R = ((volatile uint32_t*)data)[i];
-		FLASH_FMA_R &= 0xFFFC0000;
-		FLASH_FMA_R |= (uint32_t)FLASH_BASE_ADDR + (offset * sizeof(uint32_t));
-		offset++;
-		
-		FLASH_FMC2_R = (flashKey_ << 16) | 0x1;
-		while( FLASH_FMC_R & 0x1) {}
-		}
-	
-	return 0;
-		
-}
-
-//
-// READ FLASH MEMORY
-//
-void Flash_Read(void* data, int wordCount){
-	
-	for (int i = 0; i < wordCount; i++){
-		((uint32_t*)data)[i] = FLASH_BASE_ADDR[i];
-	}
-	
-}
-
-void CreateNewStudentToFlash(){
-	
-	
-}
 
 
-void get_servo_position(){
-	
-}
+
+
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Intrrupt Handlers and Misc.
@@ -186,39 +97,51 @@ void UART0Handler(void){
 // Main Method
 //-----------------------------------------------------------------------------------------------------------------------------
 
-
-
 int main(void){
-	volatile uint32_t ui32Load;
-	volatile uint32_t ui32PWMClock;
-	uint8_t ui8Degrees;
 	
-	
+
 	//UARTCharPut(UART0_BASE, 'a');
 	MCInit(); // Initialize the board
 	InitPWMforServo();
-	//Configures module 1 PWM generator 0 as a down-counter and load the count value. 
-	ui32PWMClock = SysCtlClockGet() / 64;
-	ui32Load = (ui32PWMClock / PWM_FREQ) - 1;
-	PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN);
-	PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, ui32Load);
+
+	//Enable Flash Memory Read/Write
+	uint16_t flashKey_ = Flash_Enable();
 	
-	//Enables PWM to run
-	PWMOutputState(PWM0_BASE, PWM_OUT_4_BIT, true);								// to change with change the ajust/load (currently runs for 1.5ms)
-	PWMGenEnable(PWM0_BASE, PWM_GEN_2);
+	//MASS ERASE
+	//FLASH_FMC_R = (flashKey_ << 16) | 0x4;
+	//while(FLASH_FMC_R & 0x4) {}
 	
-	idnum[0] = 1234;
-	xpos[0] = 10;
-	ypos[0] = 15;
-	zpos[0] = 32;
-	CreateNewStudentToFlash();
+	//check to see if offset has been set in Flash, if not, write 0 to
+	//initialize the offset, otherwise read the value of offset from Flash
+	uint32_t offset = Flash_Read_Offset();
+	if (offset == 0xFFFFFFFF){
+		Flash_Write_Offset();
+	}
+	else{
+		offset = OFFSET_FLASH_BASE_ADDR[0];
+	}
+	
+		
+//	uint32_t studentProf[4] = {1234, 10, 15, 32};
+//	Flash_Write(&studentProf, 4);
+//	offset = Flash_Read_Offset();
+//	uint32_t studentProf2[4] = {5678, 30, 100, 150};
+//	Flash_Write(&studentProf2, 4);
+//	offset = Flash_Read_Offset();
+//	uint32_t studentProf3[4] = {1678, 50, 800, 300};
+//	Flash_Write(&studentProf3, 4);
+//	offset = Flash_Read_Offset();
+	
+	uint32_t studentProf[4];
+	Flash_Read(&studentProf, 4, 5678);
+	
+	volatile uint32_t ui32PWMClock = SysCtlClockGet() / 64;
+	uint32_t ui32Load = (ui32PWMClock / PWM_FREQ) - 1;
+	position_servo(120, ui32Load);
 	
 	//Main Code
 	while (1){
 		
-		
-		
-		position_servo(120, ui32Load);
 	}
 }
 

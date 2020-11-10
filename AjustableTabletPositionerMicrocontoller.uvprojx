@@ -462,6 +462,31 @@
               <FileType>4</FileType>
               <FilePath>C:\ti\TivaWare_C_Series-2.2.0.295\driverlib\rvmdk\driverlib.lib</FilePath>
             </File>
+            <File>
+              <FileName>ProfileFlash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ProfileFlash.c</FilePath>
+            </File>
+            <File>
+              <FileName>ProfileFlash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\ProfileFlash.h</FilePath>
+            </File>
+            <File>
+              <FileName>KeypadI2C.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\KeypadI2C.c</FilePath>
+            </File>
+            <File>
+              <FileName>ServoPWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ServoPWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>ServoPWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\ServoPWM.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
