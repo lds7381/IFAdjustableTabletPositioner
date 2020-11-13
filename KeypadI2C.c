@@ -5,12 +5,8 @@
 #include "driverlib/i2c.h"
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h"
+#include "KeypadI2C.h"
 
-
-#define SCL_LP = 6;
-#define SCL_HP = 4;
-#define SCL_CLK = 100000;
-#define SLAVE_ADDRESS_BASE 0x4B;
 
 // Initialize the I2C module on the Microcontroller
 void Initialise_I2C(void){
