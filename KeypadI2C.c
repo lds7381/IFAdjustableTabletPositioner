@@ -64,3 +64,100 @@ void I2C_EnableSlaveDataInterrupt( void ){
 	//enable IRQ handler for slave interrupts
 	
 }
+
+static void HandleInterrupt(void){
+	
+	volatile uint32_t readback;
+	
+	// Check to see if this is a data interrupt
+	if(I2C0_SMIS_R & I2C_SMIS_DATAMIS){
+		// Clear Interrupt Flag
+		I2C0_SICR_R |= I2C_SMIS_DATAMIS;
+		
+		// Read to force the clear of the intterupt flag
+		readback = I2C0_SICR_R;
+		
+		// Reading the SCSR will clear it so it must be copied
+		uint32_t scr = I2C0_SCSR_R;
+		
+		// Data the will be received or transmitted to/from the slave
+		uint8_t data;
+		
+		//Checks for if this Data is to be for receiving
+		if(scr & I2C_SCSR_RREQ){
+			data = (uint8_t)I2C0_SDR_R;
+		}
+		//Checks for if this Data is to be for Transmitting
+		else if(scr & I2C_SCSR_TREQ){
+			I2C0_SDR_R = data;
+		}
+		
+	}
+	
+}
+
+static int InvokeMasterCommand(uint32_t mcs){
+	
+	int error = 0;
+	
+	// Clear the RIS bit (master interrupt)
+	I2C0_MICR_R |= I2C_MICR_IC;
+	
+	// Invoke the command
+	I2C0_MCS_R = mcs;
+	
+	// Wait until the RIS bit is set and 
+	while(!(I2C0_MRIS_R & I2C_MRIS_RIS));
+	
+	// Check the error status
+	mcs = I2C0_MCS_R;
+	error |= mcs & (I2C_MCS_ARBLST | I2C_MCS_DATACK | I2C_MCS_ADRACK | I2C_MCS_ERROR);
+	
+	// If there was and error but it was not an Abitiration Lost, then issue a STOP
+	if (error & I2C_MCS_ERROR && !(error & I2C_MCS_ARBLST)){
+		I2C0_MCS_R = I2C_MCS_STOP;
+	}
+	
+	return error;
+	
+}
+
+int I2C_MasterWrite(uint8_t slaveAddress, char* data, int size, bool repeatedStart){
+	
+	// Set the slave address. The R/S (0) bit is cleared for a write
+	I2C0_MSA_R = (I2C0_MSA_R & ~0xFF) | (slaveAddress << 1);
+	
+	int error = 0;
+	
+	for(int i = 0; i < size && !error; i++){
+		// Note data in MDR reads back as 0 in the debugger
+		I2C0_MDR_R = data[i];
+		
+		uint32_t mcs = I2C_MCS_RUN;
+		
+		if(i == 0){
+			
+			// Wait until the bus is idle unless this is a repeated start, if it is the bus will be busy because a transaction is still in progress
+			if(!repeatedStart){
+				while(I2C0_MCS_R & I2C_MCS_BUSBSY);
+			}
+			
+			// Start if this is the first byte
+			mcs |= I2C_MCS_START;
+			
+		}
+		
+		// Stop if this is the last byte
+		if(i == (size - 1)){
+			mcs |= I2C_MCS_STOP;
+		}
+		
+		error = InvokeMasterCommand(mcs);
+		
+	}
+	
+	return error;
+	
+}
+
+

@@ -10,6 +10,8 @@
 void Initialise_I2C(void);
 void I2C_EnableMaster(void);
 void I2C_EnableSlave(void);
-void I2C_EnableSlaveDataInterrupt( void );
+void I2C_EnableSlaveDataInterrupt(void);
+static int InvokeMasterCommand(uint32_t mcs);
+int I2C_MasterWrite(uint8_t SlaveAddress, char* data, int size, bool repeatedStart);
 
 #endif
