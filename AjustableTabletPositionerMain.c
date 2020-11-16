@@ -35,7 +35,7 @@ void MCInit(void){
 	SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN); // Configures the clock to run at 40 MHz
 	
 	//GPIO Configuatrion
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF); // Enables interrupt controller for Port F
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE); // Enables interrupt controller for Port E
 	
 	//Timer Configuration
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0); // Enables the clock to the peripheral
@@ -58,7 +58,16 @@ void MCInit(void){
 	
 }
 
+void GPIO_Init(void){
+	
+	// Enable and provide a clock to GPIO Port E in Run mode by writing to
+	// bit 4 in the GPIO I/O Clock Gating Control Register
+	SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R4;
+	
+	// Select one of several possible multiplexed functions for pin PE4
+	GPIO_PORTE_PCTL_R |= GPIO_PCTL_PE4_M0PWM4;
 
+}
 
 
 
@@ -102,6 +111,7 @@ int main(void){
 
 	//UARTCharPut(UART0_BASE, 'a');
 	MCInit(); // Initialize the board
+	GPIO_Init();
 	InitPWMforServo();
 
 	//Enable Flash Memory Read/Write

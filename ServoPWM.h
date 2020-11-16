@@ -3,6 +3,7 @@
 
 // DEFINES
 #define PWM_FREQ 50
+#define PWM_PERIOD 20
 
 void InitPWMforServo(void);
 void position_servo(uint8_t Degrees, uint32_t Load);
