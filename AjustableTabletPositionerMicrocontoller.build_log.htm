@@ -27,7 +27,17 @@ Project File Date:  11/10/2020
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
-".\AjustableTabletPositionerMicrocontoller.axf" - 0 Error(s), 0 Warning(s).
+compiling AjustableTabletPositionerMain.c...
+ProfileFlash.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif
+ServoPWM.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+AjustableTabletPositionerMain.c(115): warning:  #223-D: function "ALT_InitPWMforServo" declared implicitly
+  	ALT_InitPWMforServo();
+AjustableTabletPositionerMain.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=4784 RO-data=1516 RW-data=8 ZI-data=608  
+".\AjustableTabletPositionerMicrocontoller.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 

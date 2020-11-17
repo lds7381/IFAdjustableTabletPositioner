@@ -112,7 +112,7 @@ int main(void){
 	//UARTCharPut(UART0_BASE, 'a');
 	MCInit(); // Initialize the board
 	GPIO_Init();
-	InitPWMforServo();
+	ALT_InitPWMforServo();
 
 	//Enable Flash Memory Read/Write
 	uint16_t flashKey_ = Flash_Enable();

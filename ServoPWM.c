@@ -45,7 +45,7 @@ void InitPWMforServo(void){
 
 
 // Initializes PWM Generator 0 with a 50 Hz Frequency, a 10% duty cycle on
-// the M0PWM4 pin (PE4)
+// the M0PWM4 pin (PE4). The System lcock is 40MHz
 void ALT_InitPWMforServo(void){
 	
 	// #1 Enable the PWM clock by writing a value of 0x0010.0000 to the RCGC0
@@ -74,7 +74,7 @@ void ALT_InitPWMforServo(void){
 	// Control module to use the PWM divide (USEPWMDIV) and set the divider
 	// (PWMDIV) to divide by 2 (000)
 	SYSCTL_RCC_R |= SYSCTL_RCC_USEPWMDIV;
-	SYSCTL_RCC_R |= SYSCTL_RCC_PWMDIV_2;
+	//SYSCTL_RCC_R &= ~(0xe0000);
 	
 	// #6 Configure the PWM generator for countdown mode with immediate updates
 	// to parameters
@@ -85,6 +85,22 @@ void ALT_InitPWMforServo(void){
 	PWM0_2_GENB_R = PWM_2_GENB_ACTLOAD_ONE | PWM_2_GENB_ACTCMPBD_ZERO;
 	
 	// #7 Set the Period
+	// For a 50Hz Frequency, the period = 1/50Hz = 20ms
+	// The PWM clock source is 625kHz, the system clock divided by 64
+	// Thus there are 12500 clock ticks per period
+	// In count-down mode, set the LOAD field in the PWM)LOAD register to 
+	// the requested period - 1
+	PWM0_2_LOAD_R = PWM_LOAD;
+	
+	// #8 Set the pulse width of the MnPWM0 pin for a 10% duty cycle
+	// give it a value of 90% of PWM_LOAD
+	PWM0_2_CMPA_R = PWM_LOAD_90PERCENT;
+	
+	// #10 Start the timers in PWM generator 2
+	PWM0_2_CTL_R |= 0x4;
+	
+	// #11 Enable the PWM outputs
+	PWM0_ENABLE_R |= 0x4 | 0x1;
 	
 }
 

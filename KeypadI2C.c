@@ -7,6 +7,7 @@
 #include "driverlib/sysctl.h"
 #include "KeypadI2C.h"
 
+uint8_t keypad_input[4];
 
 // Initialize the I2C module on the Microcontroller
 void Initialise_I2C(void){
@@ -87,10 +88,8 @@ static void HandleInterrupt(void){
 		if(scr & I2C_SCSR_RREQ){
 			data = (uint8_t)I2C0_SDR_R;
 		}
-		//Checks for if this Data is to be for Transmitting
-		else if(scr & I2C_SCSR_TREQ){
-			I2C0_SDR_R = data;
-		}
+		
+		savekeypaddata(data);
 		
 	}
 	
@@ -157,6 +156,12 @@ int I2C_MasterWrite(uint8_t slaveAddress, char* data, int size, bool repeatedSta
 	}
 	
 	return error;
+	
+}
+
+void HandleKeypadInput(uint8_t data){
+	
+	
 	
 }
 
